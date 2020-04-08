@@ -23,7 +23,7 @@
     // Warn against template literal placeholder syntax in regular strings
     "no-template-curly-in-string": 1,
     // Warn if return statements do not either always or never specify values
-    "consistent-return": 1,
+    "consistent-return": "off",
     // Warn if no return statements in callbacks of array methods
     "array-callback-return": 1,
     // Require the use of === and !==
