@@ -6,11 +6,11 @@ const db = admin.firestore()
 
 /**
  * @route       api/posts GET
- * @access
+ * @access      public
  * @description returns all posts
  */
 
-router.get('/posts', (req, res) => {
+router.get('/', (req, res) => {
   db.collection('posts')
     .orderBy('createdAt', 'desc')
     .get()
@@ -33,18 +33,19 @@ router.get('/posts', (req, res) => {
 
 /**
  * @route       api/posts   POST
- * @access
+ * @access      private
+ * @description add new post
  */
 
-router.post('/posts', authorizeUser, (req, res) => {
+router.post('/', authorizeUser, (req, res) => {
   const postBody = req.body.body
   if (!postBody) return res.status(400).json({ error: 'Post body is required' })
   if (postBody.length < 2)
     return res.status(400).json({ error: 'Post body at least 2 char' })
 
   const newPost = {
-    body: postBody, // only the post body
-    userHandle: req.user.handle, // handle should be available now
+    body: postBody,
+    userHandle: req.user.handle,
     createdAt: new Date().toISOString(),
   }
 

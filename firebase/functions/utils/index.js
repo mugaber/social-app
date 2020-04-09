@@ -1,4 +1,5 @@
 const isEmpty = (string) => {
+  if (!string) return true
   if (string.trim() === '') return true
   return false
 }
@@ -37,4 +38,22 @@ validateLogin = (user) => {
   }
 }
 
-module.exports = { isEmail, isEmpty, validateSignup, validateLogin }
+const getProfileDetails = (body) => {
+  const { bio, website, location } = body
+
+  let profileDetails = {}
+
+  if (!isEmpty(bio)) profileDetails.bio = bio
+  if (!isEmpty(location)) profileDetails.location = location
+  if (!isEmpty(website)) {
+    if (website.trim().substring(0, 4) !== 'http') {
+      profileDetails.website = `http://${website.trim()}`
+    } else {
+      profileDetails.website = website.trim()
+    }
+  }
+
+  return profileDetails
+}
+
+module.exports = { isEmail, isEmpty, validateSignup, validateLogin, getProfileDetails }

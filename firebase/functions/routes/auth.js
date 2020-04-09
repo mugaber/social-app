@@ -1,11 +1,12 @@
 const router = require('express').Router()
 const { firebase, admin } = require('../config')
+const config = require('../config/firebaseConfig')
 const { validateSignup, validateLogin } = require('../utils')
 
 const db = admin.firestore()
 
 /**
- * @route        api/login POST
+ * @route        api/auth/login POST
  * @access       private
  * @description  login user
  */
@@ -43,13 +44,12 @@ router.post('/login', (req, res) => {
 })
 
 /**
- * @route        api/signup
+ * @route        api/auth/signup
  * @access       private
  * @description  signup users
  */
 
 router.post('/signup', (req, res) => {
-  // every user should have a unique handle
   const reqBody = req.body
   const newUser = {
     email: reqBody.email,
@@ -67,8 +67,7 @@ router.post('/signup', (req, res) => {
     .get()
 
     .then((doc) => {
-      if (doc.exists)
-        return res.status(400).json({ handle: 'this handle is already taken' })
+      if (doc.exists) return res.status(400).json({ handle: 'Handle is already taken' })
 
       return firebase
         .auth()
@@ -88,6 +87,7 @@ router.post('/signup', (req, res) => {
         email: newUser.email,
         handle: newUser.handle,
         createdAt: new Date().toISOString(),
+        imageUrl: `https://firebasestorage.googleapis.com/v0/b/${config.storageBucket}/o/no-img.png?alt=media`,
       }
 
       return db.doc(`/users/${newUser.handle}`).set(userCredentials)
