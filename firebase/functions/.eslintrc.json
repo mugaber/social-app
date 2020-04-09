@@ -53,7 +53,7 @@
     // Warn against new operators with the String, Number, and Boolean objects
     "no-new-wrappers": 1,
     // Disallow throwing literals as exceptions
-    "no-throw-literal": 2,
+    "no-throw-literal": "off",
     // Require using Error objects as Promise rejection reasons
     "prefer-promise-reject-errors": 2,
     // Enforce “for” loop update clause moving the counter in the right direction

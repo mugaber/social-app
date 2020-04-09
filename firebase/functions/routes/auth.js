@@ -1,4 +1,4 @@
-const router = require('express').Router()
+const route = require('express').Router()
 const { firebase, admin } = require('../config')
 const config = require('../config/firebaseConfig')
 const { validateSignup, validateLogin } = require('../utils')
@@ -11,7 +11,7 @@ const db = admin.firestore()
  * @description  login user
  */
 
-router.post('/login', (req, res) => {
+route.post('/login', (req, res) => {
   const reqBody = req.body
   const user = {
     email: reqBody.email,
@@ -49,7 +49,7 @@ router.post('/login', (req, res) => {
  * @description  signup users
  */
 
-router.post('/signup', (req, res) => {
+route.post('/signup', (req, res) => {
   const reqBody = req.body
   const newUser = {
     email: reqBody.email,
@@ -108,4 +108,4 @@ router.post('/signup', (req, res) => {
 
 //
 
-module.exports = router
+module.exports = route
