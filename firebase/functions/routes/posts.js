@@ -26,7 +26,7 @@ route.get('/', (req, res) => {
           postId: doc.id,
           body: docData.body,
           userHandle: docData.userHandle,
-          userImage: docData.imageUrl,
+          userImage: docData.userImage,
           createdAt: docData.createdAt,
           likeCount: docData.likeCount,
           commentCount: docData.commentCount,
@@ -112,8 +112,8 @@ route.post('/', authorizeUser, (req, res) => {
       return res.json(newPost)
     })
     .catch((err) => {
+      console.error(err)
       res.status(500).json({ error: 'Internal server error' })
-      return console.error(err)
     })
 })
 
@@ -143,7 +143,10 @@ route.post('/:postId/comment', authorizeUser, (req, res) => {
   db.doc(`/posts/${postId}`)
     .get()
     .then((doc) => {
-      if (!doc.exists) return res.status(400).json({ error: 'Post not found' })
+      if (!doc.exists) {
+        res.status(404).json({ error: 'Post not found' })
+        throw { name: 'noPost' }
+      }
 
       // ?? should add comment first
       return doc.ref.update({ commentCount: doc.data().commentCount + 1 })
@@ -155,6 +158,8 @@ route.post('/:postId/comment', authorizeUser, (req, res) => {
       return res.json(newComment)
     })
     .catch((err) => {
+      if (err.name === 'noPost') return
+
       console.error(err)
       return res.status(500).json({ error: err.code })
     })
@@ -184,7 +189,7 @@ route.get('/:postId/like', authorizeUser, (req, res) => {
   postDoc
     .get()
     .then((doc) => {
-      if (!doc.exists) return res.status(400).json({ error: 'Post not found' })
+      if (!doc.exists) return res.status(404).json({ error: 'Post not found' })
 
       postData = doc.data()
       postData.postId = doc.id
@@ -238,7 +243,10 @@ route.get('/:postId/unlike', authorizeUser, (req, res) => {
   postDoc
     .get()
     .then((doc) => {
-      if (!doc.exists) return res.status(400).json({ error: 'Post not found' })
+      if (!doc.exists) {
+        res.status(404).json({ error: 'Post not found' })
+        throw { name: 'noPost' }
+      }
 
       postData = doc.data()
       postData.postId = doc.id
@@ -261,7 +269,7 @@ route.get('/:postId/unlike', authorizeUser, (req, res) => {
       return res.json(postData)
     })
     .catch((err) => {
-      if (err.name === 'notLiked') return
+      if (err.name === 'notLiked' || err.name === 'noPost') return
 
       console.error(err)
       return res.status(500).json({ error: err.code })
@@ -287,8 +295,10 @@ route.delete('/:postId', authorizeUser, (req, res) => {
     .then((doc) => {
       if (!doc.exists) return res.status(400).json({ error: 'Post not found' })
 
-      if (doc.data().userHandle !== userHandle)
-        return res.status(403).json({ error: 'Unauthorized to delete post' })
+      if (doc.data().userHandle !== userHandle) {
+        res.status(403).json({ error: 'Unauthorized to delete post' })
+        throw { name: 'notAuth' }
+      }
 
       return postDoc.delete()
     })
@@ -296,6 +306,8 @@ route.delete('/:postId', authorizeUser, (req, res) => {
       return res.json({ message: 'Post deleted successfully' })
     })
     .catch((err) => {
+      if (err.name === 'noAuth') return
+
       console.error(err)
       return res.status(500).json({ error: err.code })
     })

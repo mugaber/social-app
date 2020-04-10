@@ -67,7 +67,10 @@ route.post('/signup', (req, res) => {
     .get()
 
     .then((doc) => {
-      if (doc.exists) return res.status(400).json({ handle: 'Handle is already taken' })
+      if (doc.exists) {
+        res.status(400).json({ handle: 'Handle is already taken' })
+        throw { name: 'alreadyTaken' }
+      }
 
       return firebase
         .auth()
@@ -98,11 +101,13 @@ route.post('/signup', (req, res) => {
     })
 
     .catch((err) => {
+      if (err.name === 'alreadyTaken') return
+
       console.error(err)
       if (err.code === 'auth/email-already-in-use')
         return res.status(500).json({ email: 'Email is already taken' })
 
-      return res.status(500).json({ error: err.code })
+      return res.status(500).json({ general: 'Some thing went wrong, please try again.' })
     })
 })
 
