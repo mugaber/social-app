@@ -6,9 +6,12 @@
   "dependencies": {
     "@material-ui/core": "^4.9.9",
     "@material-ui/icons": "^4.9.1",
+    "axios": "^0.19.2",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
-    "react-scripts": "3.4.1"
+    "react-router-dom": "^5.1.2",
+    "react-scripts": "3.4.1",
+    "styled-components": "^5.1.0"
   },
   "devDependencies": {
     "@testing-library/jest-dom": "^4.2.4",
@@ -35,5 +38,6 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
-  }
+  },
+  "proxy": "https://us-central1-social-app0.cloudfunctions.net/api"
 }

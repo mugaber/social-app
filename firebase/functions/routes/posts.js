@@ -4,8 +4,6 @@ const db = admin.firestore()
 
 const { authorizeUser } = require('../middlewares')
 
-// TODO: create index to query from firestore the comments on posts
-
 /**
  * @route         /api/posts/ GET
  * @access        public
