@@ -18,11 +18,29 @@ const StyledToolbar = styled(Toolbar)`
   flex-direction: row;
   justify-content: space-between;
   background-color: white;
+
+  .nav-user-info {
+    display: flex;
+    flex-direction: row;
+
+    p {
+      top: 5px;
+      font-size: 110%;
+      position: relative;
+      margin-right: 0.5rem;
+    }
+  }
 `
 
 const StyledDiv = styled.div`
+  color: black;
+
   a {
     margin: 0.3rem;
+  }
+
+  img {
+    cursor: pointer;
   }
 `
 

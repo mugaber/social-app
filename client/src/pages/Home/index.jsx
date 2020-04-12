@@ -7,6 +7,8 @@ import { HomePageContainer } from './styles'
 import Grid from '@material-ui/core/Grid'
 import CircularProgress from '@material-ui/core/CircularProgress'
 
+//
+
 function HomePage() {
   const [posts, setPosts] = useState([])
   const [loading, setLoading] = useState(true)

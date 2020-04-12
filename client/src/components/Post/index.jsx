@@ -116,7 +116,7 @@ const Post = ({ post }) => {
       <CardContent className='comment-area'>
         <Avatar src={userImage} alt='user-image' />
 
-        <Grid xs='12'>
+        <Grid item xs={12}>
           <TextField
             multiline
             variant='outlined'
